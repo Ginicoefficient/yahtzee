@@ -36,6 +36,9 @@ main {
   margin-bottom: 1rem;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
 }
 
 .roller-holder {
@@ -44,4 +47,18 @@ main {
 }
 .die-num {
   font-size: 2rem;
+}
+
+.scoresheet-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+.scoreline {
+  display: flex;
+  background-color: rgb(114, 155, 191);
+  padding: 1em;
 }
