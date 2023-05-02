@@ -6,10 +6,10 @@ export default function Scoreline(props) {
     <div
       className="scoreline"
       id={props.id}
-      onClick={() => console.log(`clicked`)}
+      onClick={!props.isScored ? props.updateScore : undefined}
     >
       <div className="score--category">{props.label} :</div>
-      <div className="score--value">Some Value</div>
+      <div className="score--value">{props.value}</div>
     </div>
   );
 }

@@ -8,11 +8,14 @@ import Scoreline from "./Components/Scoreline";
 function App() {
   const [dice, setDice] = React.useState(allNewDice());
 
+  const diceReference = React.useRef();
+
+  console.log({ diceReference });
   //generates first roll of each round
   function allNewDice() {
     const diceArray = new Array(5).fill().map(() => {
       return {
-        value: Math.floor(Math.random() * 6 + 1),
+        value: "",
         isHeld: false,
         id: nanoid(),
       };
@@ -50,16 +53,16 @@ function App() {
 
     //if not rolled three times, allow to roll again
     if (rollCount < 3) {
-      setDice((prevDice) =>
-        prevDice.map((die) => {
-          return !die.isHeld
-            ? {
-                ...die,
-                value: Math.floor(Math.random() * 6 + 1),
-              }
-            : { ...die };
-        })
-      );
+      const newDiceValue = [...dice].map((die) => {
+        return !die.isHeld
+          ? {
+              ...die,
+              value: Math.floor(Math.random() * 6 + 1),
+            }
+          : { ...die };
+      });
+      setDice(newDiceValue);
+      diceReference.current = newDiceValue;
     } else if (rollCount > 2) {
       console.log("needs to score");
       //disable roll button
@@ -75,17 +78,22 @@ function App() {
   //SCORE SHEET ELEMENTS
 
   const [score, setScore] = React.useState(VanillaScoreSheet);
-
-  const scoreElements = score.map((scoreLine, index) => (
+  console.log({ score });
+  const scoreElements = score.map((scoreline, index) => (
     <Scoreline
-      key={scoreLine.id}
-      label={scoreLine.label}
+      key={scoreline.id}
+      id={scoreline.id}
+      label={scoreline.label}
+      value={scoreline.value}
+      isScored={scoreline.isScored}
       evaluateFunction={() => {
-        scoreLine.evaluateDice(dice);
+        scoreline.evaluateDice(diceReference.current);
       }}
       updateScore={() => {
         const scoreCopy = [...score];
-        scoreCopy[index].value = scoreLine.evaluateDice(dice);
+        scoreCopy[index].value = scoreline.evaluateDice(diceReference.current);
+        scoreCopy[index].isScored = true;
+        console.log("score function run");
         setScore(scoreCopy);
       }}
     />
