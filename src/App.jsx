@@ -2,15 +2,19 @@ import React from "react";
 import Die from "./Components/Die";
 import { nanoid } from "nanoid";
 import "./App.css";
-import VanillaScoreSheet from "./VanillaScoreSheet";
-import Scoreline from "./Components/Scoreline";
+import Scoresheet from "./Components/Scoresheet";
+import { GameContext } from "./Components/GameContext";
 
 function App() {
-  const [dice, setDice] = React.useState(allNewDice());
+  const { setDiceValues } = React.useContext(GameContext);
+  const [dice, setDice] = React.useState(() => {
+    const initialState = allNewDice();
+    setDiceValues(initialState);
+    return initialState;
+  });
+  //below will change when make mode context;
+  const modeReference = React.useRef("roll");
 
-  const diceReference = React.useRef();
-
-  console.log({ diceReference });
   //generates first roll of each round
   function allNewDice() {
     const diceArray = new Array(5).fill().map(() => {
@@ -62,7 +66,7 @@ function App() {
           : { ...die };
       });
       setDice(newDiceValue);
-      diceReference.current = newDiceValue;
+      setDiceValues(newDiceValue);
     } else if (rollCount > 2) {
       console.log("needs to score");
       //disable roll button
@@ -75,29 +79,8 @@ function App() {
     //enter score mode?
   }
 
-  //SCORE SHEET ELEMENTS
-
-  const [score, setScore] = React.useState(VanillaScoreSheet);
-  console.log({ score });
-  const scoreElements = score.map((scoreline, index) => (
-    <Scoreline
-      key={scoreline.id}
-      id={scoreline.id}
-      label={scoreline.label}
-      value={scoreline.value}
-      isScored={scoreline.isScored}
-      evaluateFunction={() => {
-        scoreline.evaluateDice(diceReference.current);
-      }}
-      updateScore={() => {
-        const scoreCopy = [...score];
-        scoreCopy[index].value = scoreline.evaluateDice(diceReference.current);
-        scoreCopy[index].isScored = true;
-        console.log("score function run");
-        setScore(scoreCopy);
-      }}
-    />
-  ));
+  //enter score mode function
+  //roll click count = 3 or click has occured on score button
 
   return (
     <div>
@@ -108,7 +91,7 @@ function App() {
           <button onClick={rollNewDice}>Roll Em'</button>
           <button onClick={scoreRoll}>Score</button>
         </div>
-        <div className="scoresheet-container">{scoreElements}</div>
+        <Scoresheet />
       </main>
     </div>
   );

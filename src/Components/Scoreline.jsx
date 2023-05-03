@@ -2,6 +2,9 @@ import React from "react";
 
 export default function Scoreline(props) {
   //needs to be sent score function and information about the line that is clicked.
+
+  console.log("scoreline prop run");
+
   return (
     <div
       className="scoreline"
