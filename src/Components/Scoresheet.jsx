@@ -4,10 +4,7 @@ import VanillaScoreSheet from "../VanillaScoreSheet";
 import { GameContext } from "./GameContext";
 
 export default function Scoresheet(props) {
-  const { getDiceValues } = React.useContext(GameContext);
-  ///props from above that scoreline needs
-  //checkmode
-  //does it need something to return diceref or can it access that already?
+  const { getDiceValues, setGameMode } = React.useContext(GameContext);
   const [score, setScore] = React.useState(VanillaScoreSheet);
 
   //update score function
@@ -15,9 +12,8 @@ export default function Scoresheet(props) {
     const scoreCopy = [...score];
     scoreCopy[index].value = scoreline.evaluateDice(getDiceValues());
     scoreCopy[index].isScored = true;
-    console.log("score function run");
     setScore(scoreCopy);
-    //set score mode to false
+    setGameMode("toReset");
   }
 
   const scoreElements = score.map((scoreline, index) => (

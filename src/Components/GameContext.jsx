@@ -9,7 +9,7 @@ const GameContext = React.createContext({
 
 function GameProvider(props) {
   const diceReference = React.useRef();
-  const modeReference = React.useRef();
+  const modeReference = React.useRef("roll");
 
   function getGameMode() {
     return modeReference.current;
@@ -17,6 +17,7 @@ function GameProvider(props) {
 
   function setGameMode(mode) {
     modeReference.current = mode;
+    console.log(modeReference.current);
   }
 
   function getDiceValues() {

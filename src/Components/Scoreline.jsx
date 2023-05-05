@@ -1,15 +1,17 @@
 import React from "react";
+import { GameContext } from "./GameContext";
 
 export default function Scoreline(props) {
-  //needs to be sent score function and information about the line that is clicked.
-
-  console.log("scoreline prop run");
-
+  const { getGameMode } = React.useContext(GameContext);
   return (
     <div
       className="scoreline"
       id={props.id}
-      onClick={!props.isScored ? props.updateScore : undefined}
+      onClick={() => {
+        if (!props.isScored && getGameMode() === "score") {
+          props.updateScore();
+        }
+      }}
     >
       <div className="score--category">{props.label} :</div>
       <div className="score--value">{props.value}</div>

@@ -91,4 +91,28 @@ export default [
       return diceTotal;
     },
   },
+  {
+    id: "threeofkind",
+    label: "Three of a Kind",
+    value: "",
+    isScored: false,
+    evaluateDice: (someDiceSet) => {
+      const counter = {};
+      let diceTotal = 0;
+      someDiceSet.map((die) => {
+        if (counter.hasOwnProperty[die.value.toString()]) {
+          counter[die.value.toString()] += 1;
+          diceTotal += die.value;
+        } else {
+          counter[die.value.toString()] = 1;
+        }
+        diceTotal += die.value;
+      });
+      if (Object.values(counter).indexOf("3") > -1) {
+        return diceTotal;
+      } else {
+        return 0;
+      }
+    },
+  },
 ];
