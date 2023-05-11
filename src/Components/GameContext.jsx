@@ -1,37 +1,53 @@
 import React from "react";
+import { nanoid } from "nanoid";
 
 const GameContext = React.createContext({
-  getDiceValues: () => {},
-  setDiceValues: () => {},
-  getGameMode: () => {},
-  setGameMode: () => {},
+  dice: {},
+  setDice: () => {},
+  mode: "roll",
+  setMode: () => {},
+  rollCount: 1,
+  setRollCount: () => {},
 });
 
 function GameProvider(props) {
-  const diceReference = React.useRef();
-  const modeReference = React.useRef("roll");
+  //dice-related functions
+  const [dice, setDice] = React.useState(allNewDice());
 
-  function getGameMode() {
-    return modeReference.current;
+  //generates first roll of each round and initializes game mode to roll
+  function allNewDice() {
+    const diceArray = new Array(5).fill().map(() => {
+      return {
+        value: "",
+        isHeld: false,
+        id: nanoid(),
+      };
+    });
+    return diceArray;
   }
 
-  function setGameMode(mode) {
-    modeReference.current = mode;
-    console.log(modeReference.current);
+  function clearDice() {
+    setDice(allNewDice());
   }
 
-  function getDiceValues() {
-    return diceReference.current;
-  }
+  //roll count related functions
+  //holds the number of times dice have been rolled in a hand
+  const [rollCount, setRollCount] = React.useState(1);
 
-  function setDiceValues(diceValues) {
-    console.log("setDiceMode from context run");
-    diceReference.current = diceValues;
-  }
+  //game mode related functions
+  const [mode, setMode] = React.useState("roll");
 
   return (
     <GameContext.Provider
-      value={{ getDiceValues, setDiceValues, getGameMode, setGameMode }}
+      value={{
+        dice,
+        setDice,
+        clearDice,
+        mode,
+        setMode,
+        rollCount,
+        setRollCount,
+      }}
     >
       {props.children}
     </GameContext.Provider>
