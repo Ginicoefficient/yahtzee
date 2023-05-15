@@ -21,7 +21,7 @@ export default function Scoreline(props) {
   }
   return (
     <div
-      className="scoreline"
+      className="scoreline grid-item"
       id={props.id}
       onClick={() => {
         if (!props.isScored && mode === "score" && props.isEligble) {

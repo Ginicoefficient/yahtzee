@@ -88,21 +88,47 @@ export default function Scoresheet(props) {
     />
   ));
 
-  const upperScoreElements = scoreElements.slice(0, 5);
+  const upperScoreElements = scoreElements.slice(0, 6);
   const lowerScoreElements = scoreElements.slice(6);
+
+  //can change this later so that it is stored in state somehwere? in context?
+  //can display when gamemode === endgame
+  //or show a running total of all scores?
+  const upperScoreValue = score
+    .slice(0, 6)
+    .map((line) => Number(line.value))
+    .reduce((total, current) => {
+      return total + current;
+    });
+
+  const upperBonusValue = upperScoreValue >= 63 ? 35 : 0;
+  const lowerScoreValue = score
+    .slice(6)
+    .map((line) => Number(line.value))
+    .reduce((total, current) => {
+      return total + current;
+    });
+  const totalScore = upperBonusValue + upperScoreValue + lowerScoreValue;
 
   return (
     <div className="scoresheet-container">
       <section className="upper-score-elements">
         {upperScoreElements}
-        <br></br>
-        <div className="upper-bonus score">Upper Section Bonus:</div>
-        <div className="upper-total score">Upper Section Total:</div>
+        <div className="upper-bonus score">
+          Upper Section Bonus: {upperBonusValue}
+        </div>
+        <div className="upper-total score">
+          Upper Section Total: {upperScoreValue}
+        </div>
       </section>
       <section className="lower-score-elements">
         {lowerScoreElements}
-        <div className="lower-score score">Lower Score Total:</div>
-        <div className="game-score-total score">Overall Score:</div>
+        <div className="lower-score score">
+          Lower Score Total: {lowerScoreValue}
+        </div>
+        <div className="game-score-total score">
+          Overall Score: {totalScore}
+        </div>
       </section>
     </div>
   );
